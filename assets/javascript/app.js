@@ -95,7 +95,7 @@ $(document).ready(function () {
         }
         // https://api.nal.usda.gov/ndb/V2/reports?ndbno=01009&ndbno=01009&ndbno=45202763&ndbno=35193&type=b&format=json&api_key=DEMO_KEY
         var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
-        var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + foodNumber + "&format=json&q=" + "&max=5&offset=0" + "&api_key=" + APIKEY;
+        var queryURL = "https://api.nal.usda.gov/ndb/V2/reports?ndbno=" + foodNumber + "&format=json&q=" + "&max=5&offset=0&type=f" + "&api_key=" + APIKEY;
         console.log("foodReportAjax queryURL: ", queryURL);
         // AJAX request with the queryURL
         $.ajax({
@@ -126,11 +126,13 @@ $(document).ready(function () {
         foodNameRow.html("<td class='data-heading-col'>Name:</td>" + "<td class='data-col'>" + foodName + "</td></tr></table>");        
         reportWrapTable.append(foodNameRow);
 
-        var nutrientsRows = function () { 
-            console.log("hi loop", results.foods[0].food.nutrients.length);  
-            console.log("hi name: ", results.foods[0].food.nutrients[0].name);         
+        var manuName = results.foods[0].food.desc.manu;
+        var manuNameRow = $('<tr>');
+        manuNameRow.html("<td class='data-heading-col'>Manufacturer:</td>" + "<td class='data-col'>" + manuName + "</td></tr></table>");        
+        reportWrapTable.append(manuNameRow);
+
+        var nutrientsRows = function () {         
             for (var i = 0; i < results.foods[0].food.nutrients.length; i++) {
-                console.log("loop#: ", i);
                 var title = results.foods[0].food.nutrients[i].name;
                 var value = results.foods[0].food.nutrients[i].value;
                 var nutrientRow = $('<tr>');
