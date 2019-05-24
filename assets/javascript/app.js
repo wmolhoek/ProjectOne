@@ -25,7 +25,7 @@ $(document).ready(function () {
         searchList.push(input);
         console.log("searchList: ", searchList);
         var APIKEY = "MTThsOXeyC4yDoAe048samFSx66c0bbwi0HO6m4G";
-        var queryURL = "https://api.nal.usda.gov/ndb/search/?format=json&q=" + input + "&max=5&offset=0" + "&api_key=" + APIKEY;
+        var queryURL = "https://api.nal.usda.gov/ndb/search/?format=json&q=" + input + "&max=10&offset=0" + "&api_key=" + APIKEY;
         console.log("foodSearchAjax queryURL: ", queryURL);
         // AJAX request with the queryURL
         $.ajax({
@@ -46,7 +46,7 @@ $(document).ready(function () {
         displayDiv.empty();
         var resultsInfo = $('<div>');
         resultsInfo.attr("id", "results-div");
-        resultsInfo.html("<span>Results 1 - 5</span>");
+        resultsInfo.html("<span>Results 1 - 10</span>");
         displayDiv.append(resultsInfo);
         for (var i = 0; i < x.list.item.length; i++) {
             var foodName = x.list.item[i].name;
@@ -54,6 +54,7 @@ $(document).ready(function () {
             var button = $('<button class="search-wrapper">');
             button.text(foodName);
             button.attr("value", foodId);
+            button.attr("data-toggle", "off-initial");
             var buttonParentDiv = $("<div>");
             buttonParentDiv.attr("data-id", foodId);
             buttonParentDiv.append(button);
@@ -65,8 +66,24 @@ $(document).ready(function () {
         console.log("button clicked");
         var buttonParentDiv = $(this).parent();
         var foodNumber = $(this).attr("value");
-        foodReportAjax(foodNumber, buttonParentDiv);
+        var dataToggleState = $(this).attr("data-toggle");
+        if (dataToggleState === "off") {
+            $("table#" + foodNumber).show();
+            $(this).attr("data-toggle", "on");
+        } else if (dataToggleState === "on") {
+            $("table#" + foodNumber).hide();
+            $(this).attr("data-toggle", "off");
+        } else {
+            foodReportAjax(foodNumber, buttonParentDiv);
+            $(this).attr("data-toggle", "on");
+        };
+        
     });
+
+    // $( "li.item-ii" ).find( "table" ).hide();
+
+
+
 
 
 
